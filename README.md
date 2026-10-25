@@ -29,6 +29,23 @@ not attempt to log in to, exploit, or evade anything.
 The JSON is the interchange format: **any RusNet viewer loads any RusNet JSON**. Send someone a
 `.json` and they can render the whole report themselves.
 
+## Install
+
+The core needs only Python 3.9+. The install scripts create a `.venv`, install `requirements.txt`
+(pywebview + psutil, for the desktop app and cleaner interface enumeration), and add the `rusnet`
+command:
+
+```powershell
+.\install.ps1            # Windows (PowerShell); -System to skip the venv
+```
+```sh
+./install.sh            # macOS / Linux; --system to skip the venv
+```
+
+Then activate the environment (`.\.venv\Scripts\Activate.ps1` or `source .venv/bin/activate`). You can
+also skip the scripts entirely and run the stdlib-only core straight from the checkout with
+`python -m rusnet ...`.
+
 ## Quick start
 
 ```powershell
