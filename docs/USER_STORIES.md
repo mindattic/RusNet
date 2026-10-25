@@ -23,3 +23,4 @@ _Nothing recorded yet._
 |---|---|---|---|---|---|
 | RN-T1 | 2026-10-25 | docs | closed | Start the permanent ticket log in the ticket database | — |
 | RN-T2 | 2026-10-25 | chore | closed | Scaffold RusNet: local-network inventory scanner (Python core, standardized JSON schema v1, self-contained interactive HTML viewer, Python + .NET WebView2 desktop hosts) | — |
+| RN-T3 | 2026-10-25 | fix | closed | Fix 4 defects found by /bughunt: mDNS query missing the unicast-response (QU) bit so it returned nothing; OS donut slice/legend filtered every host out (wrong field); network-map leaked internal x/y onto host objects into Copy-as-JSON; dead gw placeholder in the psutil interface path | — |

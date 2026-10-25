@@ -27,7 +27,10 @@ def _encode_name(name: str) -> bytes:
 def _build_query(name: str, qtype: int = 12) -> bytes:
     # Header: id=0, flags=0 (standard query), 1 question.
     header = struct.pack(">HHHHHH", 0, 0, 1, 0, 0, 0)
-    question = _encode_name(name) + struct.pack(">HH", qtype, 1)
+    # qclass: IN (1) with the top "unicast-response" (QU) bit set -> 0x8001. Without it, responders
+    # answer by multicast to 224.0.0.251:5353, which this ephemeral, non-group-joined socket never
+    # receives; with it they unicast the reply back to our source port, so discovery actually works.
+    question = _encode_name(name) + struct.pack(">HH", qtype, 0x8001)
     return header + question
 
 

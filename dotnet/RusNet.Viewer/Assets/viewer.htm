@@ -591,8 +591,10 @@ body{
   }
 
   // ---- charts ----------------------------------------------------------------------------------
-  function donut(entries, total, colorFn) {
-    // entries: [{label, value}]. Returns an SVG donut element.
+  function donut(entries, total, colorFn, onSlice) {
+    // entries: [{label, value}]. Returns an SVG donut element. onSlice(label) is wired to each
+    // segment only when given - a donut whose labels aren't a device type must not drive the
+    // device-type filter, or it would filter every host out.
     var ns = 'http://www.w3.org/2000/svg';
     var size = 140, r = 52, cx = size / 2, cy = size / 2, circ = 2 * Math.PI * r;
     var svg = document.createElementNS(ns, 'svg');
@@ -613,8 +615,10 @@ body{
       seg.setAttribute('stroke-dasharray', (frac * circ) + ' ' + circ);
       seg.setAttribute('stroke-dashoffset', -offset * circ);
       seg.setAttribute('transform', 'rotate(-90 ' + cx + ' ' + cy + ')');
-      seg.style.cursor = 'pointer';
-      seg.addEventListener('click', function () { toggleTypeFilter(ent.label); });
+      if (onSlice) {
+        seg.style.cursor = 'pointer';
+        seg.addEventListener('click', function () { onSlice(ent.label); });
+      }
       var title = document.createElementNS(ns, 'title'); title.textContent = ent.label + ': ' + ent.value;
       seg.appendChild(title);
       svg.appendChild(seg);
@@ -632,21 +636,23 @@ body{
     return svg;
   }
 
-  function donutCard(title, counts, colorFn) {
+  function donutCard(title, counts, colorFn, onSlice) {
     var entries = Object.keys(counts).map(function (k) { return { label: k, value: counts[k] }; })
                         .sort(function (a, b) { return b.value - a.value; });
     var total = entries.reduce(function (s, e) { return s + e.value; }, 0);
     var card = el('div', 'rn-card'); card.appendChild(el('h3', null, title));
     var row = el('div', 'rn-chart-row');
-    row.appendChild(donut(entries, total, colorFn));
+    row.appendChild(donut(entries, total, colorFn, onSlice));
     var legend = el('ul', 'rn-legend');
     entries.forEach(function (e, i) {
       var li = el('li');
       var sw = el('span', 'sw'); sw.style.background = colorFn(e, i); li.appendChild(sw);
       var lbl = el('span', 'lbl', e.label); li.appendChild(lbl);
       li.appendChild(el('span', 'n', String(e.value)));
-      li.style.cursor = 'pointer';
-      li.addEventListener('click', function () { toggleTypeFilter(e.label); });
+      if (onSlice) {
+        li.style.cursor = 'pointer';
+        li.addEventListener('click', function () { onSlice(e.label); });
+      }
       legend.appendChild(li);
     });
     row.appendChild(legend); card.appendChild(row);
@@ -686,15 +692,18 @@ body{
     var ring = others.length;
     var radius = Math.min(cx, cy) - 70;
 
-    // edges first so nodes sit on top
+    // edges first so nodes sit on top. Positions are kept in a parallel array, never written onto
+    // the host objects (they're the same references the detail view and "Copy as JSON" use).
     var edges = [];
+    var pts = [];
     others.forEach(function (h, i) {
       var ang = (i / ring) * 2 * Math.PI - Math.PI / 2;
-      h.__x = cx + radius * Math.cos(ang); h.__y = cy + radius * Math.sin(ang);
+      var x = cx + radius * Math.cos(ang), y = cy + radius * Math.sin(ang);
+      pts.push({ x: x, y: y });
       var line = document.createElementNS(ns, 'line');
       line.setAttribute('class', 'rn-edge');
       line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-      line.setAttribute('x2', h.__x); line.setAttribute('y2', h.__y);
+      line.setAttribute('x2', x); line.setAttribute('y2', y);
       line.dataset.ip = h.ip; edges.push(line); svg.appendChild(line);
     });
 
@@ -727,7 +736,7 @@ body{
       return g;
     }
 
-    others.forEach(function (h) { svg.appendChild(node(h, h.__x, h.__y, false)); });
+    others.forEach(function (h, i) { svg.appendChild(node(h, pts[i].x, pts[i].y, false)); });
     if (center) svg.appendChild(node(center, cx, cy, true));
     return svg;
   }
@@ -931,7 +940,8 @@ body{
     // charts
     clear(dom.charts);
     var typeCounts = countBy(all, function (h) { return h.device_type; });
-    dom.charts.appendChild(donutCard('Device types', typeCounts, function (e) { return typeInfo(e.label).c; }));
+    // Only the device-type donut drives the (device-type) filter; others are display-only.
+    dom.charts.appendChild(donutCard('Device types', typeCounts, function (e) { return typeInfo(e.label).c; }, toggleTypeFilter));
     var osCounts = countBy(all.filter(function (h) { return h.os_guess; }), function (h) { return h.os_guess; });
     dom.charts.appendChild(donutCard('Operating systems', osCounts, function (e, i) { return PALETTE[i % PALETTE.length]; }));
     var vendorCounts = countBy(all.filter(function (h) { return h.vendor; }), function (h) { return h.vendor; });

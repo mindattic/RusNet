@@ -32,11 +32,7 @@ def _via_psutil() -> List[Interface]:
     out: List[Interface] = []
     addrs = psutil.net_if_addrs()
     stats = psutil.net_if_stats()
-    gws = {}
-    try:
-        gw = psutil.net_if_stats  # placeholder; gateways need netifaces, handled below
-    except Exception:
-        gw = None
+    # psutil can't give gateways/DNS; discover() fills those from the OS tool afterwards by CIDR.
     for name, snics in addrs.items():
         st = stats.get(name)
         if st is not None and not st.isup:
