@@ -18,6 +18,7 @@ import os
 import sys
 import threading
 
+from .paths import get_downloads_dir
 from .report import build_html
 
 
@@ -36,6 +37,7 @@ class Api:
 
         result = self._window.create_file_dialog(
             webview.OPEN_DIALOG,
+            directory=get_downloads_dir(),
             allow_multiple=False,
             file_types=("RusNet report (*.json)", "All files (*.*)"),
         )

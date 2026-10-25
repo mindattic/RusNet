@@ -17,6 +17,7 @@ import webbrowser
 
 from . import __version__
 from .model import Scan
+from .paths import get_downloads_dir
 from .report import build_html, write_report
 from .scanner import Options, run
 
@@ -31,8 +32,9 @@ def _add_scan_args(p: argparse.ArgumentParser) -> None:
     p.add_argument("--no-dns", action="store_true", help="skip reverse-DNS / NetBIOS name lookups")
     p.add_argument("--ping-timeout", type=int, default=800, metavar="MS", help="per-host ping timeout (ms)")
     p.add_argument("--max-hosts", type=int, default=1024, metavar="N", help="cap hosts swept per network")
-    p.add_argument("-o", "--out", default="network-map", metavar="NAME",
-                   help="output basename; writes <name>.json and <name>.htm (default: network-map)")
+    p.add_argument("-o", "--out", default=None, metavar="NAME",
+                   help="output basename; writes <name>.json and <name>.htm "
+                        "(default: network-map in the user's Downloads folder)")
     p.add_argument("--open", action="store_true", help="open the HTML report in the default browser when done")
 
 
@@ -49,8 +51,12 @@ def cmd_scan(args: argparse.Namespace) -> int:
     )
     scan = run(opts)
 
-    json_path = args.out + ".json"
-    html_path = args.out + ".htm"
+    out = args.out or os.path.join(get_downloads_dir(), "network-map")
+    json_path = out + ".json"
+    html_path = out + ".htm"
+    out_dir = os.path.dirname(json_path)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(json_path, "w", encoding="utf-8") as fh:
         json.dump(scan.to_dict(), fh, ensure_ascii=False, indent=2)
     write_report(scan, html_path)

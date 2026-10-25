@@ -124,7 +124,9 @@ public partial class MainWindow : Window
         {
             Title = "Open RusNet report",
             Filter = "RusNet report (*.json)|*.json|All files (*.*)|*.*",
-            CheckFileExists = true
+            CheckFileExists = true,
+            InitialDirectory = KnownFolders.TryGetDownloads()
+                ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
         };
 
         if (dialog.ShowDialog(this) == true)
