@@ -73,6 +73,14 @@
     // A native host sets this to its own file-open routine; the Open button prefers it.
     hostOpen: null,
     setHostOpen: function (fn) { api.hostOpen = fn; },
+    // A native host that can run a scan registers it here; doing so reveals the Scan buttons (a
+    // plain sandboxed browser can't scan, so without a host they stay hidden).
+    hostScan: null,
+    setHostScan: function (fn) { api.hostScan = fn; showScanUi(!!fn); },
+    // A host toggles the scanning overlay around its scan.
+    setScanning: function (on) {
+      if (dom.scanning) dom.scanning.classList.toggle('is-active', !!on);
+    },
     reset: function () { state.data = null; render(); }
   };
   root.rusnet = api;
@@ -81,6 +89,15 @@
   function requestOpen() {
     if (typeof api.hostOpen === 'function') { api.hostOpen(); return; }
     dom.fileInput.click();
+  }
+  function requestScan() {
+    if (typeof api.hostScan === 'function') { api.hostScan(); }
+  }
+  // Reveal or hide every Scan trigger (toolbar + empty state); hosts that can scan call this.
+  function showScanUi(on) {
+    document.querySelectorAll('[data-rn-scan]').forEach(function (b) {
+      b.classList.toggle('rn-hidden', !on);
+    });
   }
   function readFile(file) {
     var r = new FileReader();
@@ -506,9 +523,11 @@
     dom.toast = document.getElementById('rn-toast');
     dom.fileInput = document.getElementById('rn-file');
     dom.drop = document.getElementById('rn-drop');
+    dom.scanning = document.getElementById('rn-scanning');
 
     document.querySelectorAll('.rn-section').forEach(wireSection);
     document.querySelectorAll('[data-rn-open]').forEach(function (b) { b.addEventListener('click', requestOpen); });
+    document.querySelectorAll('[data-rn-scan]').forEach(function (b) { b.addEventListener('click', requestScan); });
     dom.fileInput.addEventListener('change', function () { if (this.files[0]) readFile(this.files[0]); this.value = ''; });
     dom.search.addEventListener('input', function () { state.filter = this.value; render(); });
 

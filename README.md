@@ -47,15 +47,17 @@ Outputs default to `network-map.json` and `network-map.htm` (change with `-o`).
 The same self-contained HTML viewer is the heart of all three surfaces; they differ only in how you
 load a file.
 
-| Surface | How to load a report | Run |
-|---|---|---|
-| **HTML report** | drag-drop a `.json`, or the in-page Open button | open `network-map.htm` in any browser |
-| **Python desktop app** | native OS file dialog | `pip install pywebview` then `python -m rusnet.desktop [file.json]` (or `--scan`) |
-| **.NET WebView2 app** | native OS file dialog | `dotnet run --project dotnet/RusNet.Viewer` (see [`dotnet/README.md`](dotnet/README.md)) |
+| Surface | Load a report | Scan from the app | Run |
+|---|---|---|---|
+| **HTML report** | drag-drop a `.json`, or the in-page Open button | — (browsers can't scan) | open `network-map.htm` in any browser |
+| **Python desktop app** | native OS file dialog | **Scan** button (in-process) | `pip install pywebview` then `python -m rusnet.desktop [file.json]` (or `--scan`) |
+| **.NET WebView2 app** | native OS file dialog | **Scan** button (runs `python -m rusnet scan`) | `dotnet run --project dotnet/RusNet.Viewer` (see [`dotnet/README.md`](dotnet/README.md)) |
 
-All three expose the same JS contract so any host can drive the viewer:
-`window.rusnet.load(objectOrJsonString)` renders a report, and `window.rusnet.setHostOpen(fn)` lets a
-native host wire its own file dialog to the page's Open button.
+Both desktop apps are **the same web viewer with no native chrome**, so they look identical; Open,
+Scan and the sun/moon toggle live in the page's own toolbar. All three surfaces share one JS contract:
+`window.rusnet.load(objectOrJsonString)` renders a report, `setHostOpen(fn)` / `setHostScan(fn)` let a
+native host wire its own file dialog and scanner to the toolbar buttons (registering `setHostScan` is
+what reveals the Scan button), and `setScanning(bool)` toggles the scanning overlay.
 
 ## Layout
 

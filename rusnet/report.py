@@ -56,6 +56,8 @@ _BODY = """
   <span class="ma-toolbar__label">network map</span>
   <div class="rn-toolbar__spacer"></div>
   <input id="rn-search" class="rn-search" type="search" placeholder="Search hosts, IPs, ports, vendors..." />
+  <button class="ma-btn rn-hidden" data-rn-scan
+          style="--ma-btn-u:0.85rem;--ma-btn-bg:var(--bg3);--ma-btn-border:var(--border);--ma-btn-hover-bg:var(--accent);--ma-btn-hover-border:var(--accent);--ma-btn-fg:var(--text);">Scan network</button>
   <button class="ma-btn" data-rn-open
           style="--ma-btn-u:0.85rem;--ma-btn-bg:var(--accent);--ma-btn-border:var(--accent);--ma-btn-hover-bg:var(--text);--ma-btn-hover-border:var(--text);--ma-btn-fg:#fff;">Open report&hellip;</button>
   <button class="ma-theme-toggle" aria-label="Toggle theme"></button>
@@ -67,8 +69,12 @@ _BODY = """
 <div class="rn-wrap">
   <div id="rn-empty" class="rn-empty rn-hidden">
     <h2>No report loaded</h2>
-    <p>Open a RusNet <code>network-map.json</code> file, or drag one anywhere onto this window.</p>
-    <button class="ma-btn" data-rn-open>Open a report</button>
+    <p>Scan your network, open a RusNet <code>network-map.json</code> file, or drag one anywhere onto this window.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="ma-btn rn-hidden" data-rn-scan
+              style="--ma-btn-bg:var(--accent);--ma-btn-border:var(--accent);--ma-btn-hover-bg:var(--text);--ma-btn-hover-border:var(--text);--ma-btn-fg:#fff;">Scan this network</button>
+      <button class="ma-btn" data-rn-open>Open a report</button>
+    </div>
   </div>
 
   <div id="rn-content" class="rn-hidden">
@@ -95,6 +101,14 @@ _BODY = """
 </div>
 
 <div id="rn-drop" class="rn-drop"><div class="rn-drop__box">Drop a RusNet JSON file to load it</div></div>
+
+<div id="rn-scanning" class="rn-scanning">
+  <div class="rn-scanning__box">
+    <div class="rn-spinner" aria-hidden="true"></div>
+    <div class="rn-scanning__text">Scanning the network&hellip;</div>
+    <div class="rn-scanning__sub">Sweeping hosts, reading ARP, asking devices to describe themselves.</div>
+  </div>
+</div>
 
 <div id="rn-detail" class="ma-modal rn-detail">
   <div class="ma-modal__dialog">

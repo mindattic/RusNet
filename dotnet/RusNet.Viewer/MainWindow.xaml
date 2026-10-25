@@ -7,21 +7,7 @@
         MinWidth="720" MinHeight="480"
         WindowStartupLocation="CenterScreen"
         Background="#0D1117">
-    <DockPanel Background="#0D1117">
-        <!-- Native chrome: an Open button in addition to the in-page buttons -->
-        <Border DockPanel.Dock="Top" Background="#161B22" Padding="8,6" BorderBrush="#30363D" BorderThickness="0,0,0,1">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="OpenButton"
-                        Content="Open report…"
-                        Padding="12,4"
-                        Click="OpenButton_Click"
-                        Foreground="#C9D1D9"
-                        Background="#21262D"
-                        BorderBrush="#30363D"
-                        Cursor="Hand"/>
-            </StackPanel>
-        </Border>
-
-        <wv2:WebView2 x:Name="WebView" />
-    </DockPanel>
+    <!-- No native chrome: the window is nothing but the shared web viewer, so this app is visually
+         identical to the Python (pywebview) app. Open and Scan live in the page's own toolbar. -->
+    <wv2:WebView2 x:Name="WebView" />
 </Window>

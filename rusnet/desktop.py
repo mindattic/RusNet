@@ -49,11 +49,15 @@ class Api:
             return json.dumps({"__error__": str(exc)})
 
     def scan_now(self):
-        """Run a live scan and return the report JSON as text (blocks the bridge call briefly)."""
-        from .scanner import Options, run
+        """Run a live scan and return the report JSON as text. Runs on a pywebview worker thread, so
+        the window stays responsive; errors come back as {"__error__": ...} for the page to show."""
+        try:
+            from .scanner import Options, run
 
-        scan = run(Options(), on_log=lambda m: None)
-        return json.dumps(scan.to_dict(), ensure_ascii=False)
+            scan = run(Options(), on_log=lambda m: None)
+            return json.dumps(scan.to_dict(), ensure_ascii=False)
+        except Exception as exc:  # pragma: no cover - defensive, surfaced to the user
+            return json.dumps({"__error__": str(exc)})
 
 
 _WIRE_JS = """
@@ -63,9 +67,23 @@ _WIRE_JS = """
     window.rusnet.setHostOpen(function () {
       window.pywebview.api.open_file().then(function (txt) { if (txt) window.rusnet.load(txt); });
     });
-    window.__rusnetScan = function () {
-      window.pywebview.api.scan_now().then(function (txt) { if (txt) window.rusnet.load(txt); });
-    };
+    // scan_now runs on a pywebview worker thread, so the window stays responsive; show the overlay
+    // around it and load the result (or a readable error) when it returns.
+    window.rusnet.setHostScan(function () {
+      window.rusnet.setScanning(true);
+      window.pywebview.api.scan_now().then(function (txt) {
+        window.rusnet.setScanning(false);
+        if (!txt) return;
+        try {
+          var obj = JSON.parse(txt);
+          if (obj && obj.__error__) { alert('Scan failed: ' + obj.__error__); return; }
+        } catch (e) {}
+        window.rusnet.load(txt);
+      }).catch(function (e) {
+        window.rusnet.setScanning(false);
+        alert('Scan failed: ' + e);
+      });
+    });
   }
   wire();
 })();
