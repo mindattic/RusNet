@@ -7,7 +7,7 @@ interactive HTML page you can open anywhere, with light/dark (sun/moon) themes.
 [![Stack](https://img.shields.io/badge/stack-Python%20%2B%20HTML%2FCSS%2FJS%20%2B%20.NET%20WebView2-blue)](#layout)
 [![Deps](https://img.shields.io/badge/core-stdlib%20only-brightgreen)](#requirements)
 [![UI](https://img.shields.io/badge/UI-MindAttic.Components-6ba3e8)](#the-viewer)
-[![Status](https://img.shields.io/badge/status-0.1.0-success)](#status)
+[![Status](https://img.shields.io/badge/status-1.0.0-success)](#status)
 
 RusNet is a home/office **network-inventory** tool in the spirit of Fing or Angry IP Scanner. It is
 for networks you own or are authorised to assess. It uses only standard, benign discovery - it does
@@ -139,4 +139,5 @@ visibility, not intrusion: no authentication attempts, no exploitation, no evasi
 
 ## Status
 
-0.1.0 - working end to end: live scan, JSON map, self-contained report, Python and .NET viewers.
+1.0.0 - working end to end: live scan, JSON map, self-contained report, Python and .NET viewers.
+Versioning: N.0.0, N incrementing by one each release.

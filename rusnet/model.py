@@ -86,7 +86,7 @@ class Scan:
     finished_at: str = ""
     scanner_host: str = field(default_factory=socket.gethostname)
     tool: str = "RusNet"
-    version: str = "0.1.0"
+    version: str = "1.0.0"
     networks: List[str] = field(default_factory=list)
     interfaces: List[Interface] = field(default_factory=list)
     hosts: List[Host] = field(default_factory=list)

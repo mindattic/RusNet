@@ -13,7 +13,7 @@ at runtime through `window.rusnet.load(objectOrJsonString)`.
 ```jsonc
 {
   "tool": "RusNet",               // producer name
-  "version": "0.1.0",             // producer version
+  "version": "1.0.0",             // producer version
   "scanner_host": "my-pc",        // hostname of the machine that ran the scan
   "started_at":  "2026-10-25T14:03:11-05:00",   // ISO-8601 with offset
   "finished_at": "2026-10-25T14:04:48-05:00",

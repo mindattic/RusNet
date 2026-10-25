@@ -9,4 +9,4 @@ It is a home/office network-inventory tool in the spirit of Fing or Angry IP Sca
 discovery techniques, local scope, no exploitation. Only scan networks you own or are authorised to.
 """
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
