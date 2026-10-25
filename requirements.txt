@@ -3,7 +3,7 @@
 # The CORE of RusNet - scanning, the JSON map, and the self-contained HTML report
 # (`python -m rusnet scan|report|viewer`) - needs NOTHING beyond the Python 3.9+
 # standard library. These packages only enable the two optional surfaces below, and
-# are what install.ps1 / install.sh install.
+# are what deploy.ps1 installs (pyproject.toml's [desktop,interfaces] extras).
 
 # Native desktop viewer window with native file dialogs (`python -m rusnet.desktop`).
 # On Windows it uses the built-in Edge WebView2 runtime.

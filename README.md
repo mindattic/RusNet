@@ -31,31 +31,33 @@ The JSON is the interchange format: **any RusNet viewer loads any RusNet JSON**.
 
 ## Install
 
-**Windows, easiest:** double-click **`install.bat`** and pick **Python**, **Windows** (the .NET
-desktop app), or **Both**. It auto-installs any missing prerequisites (Python, the .NET SDK, the Edge
-WebView2 runtime) via `winget`, then sets up what you chose. Scriptable too:
+**Windows, easiest:** double-click **`deploy.bat`** (or run **`deploy.ps1`** directly). It
+auto-installs any missing prerequisites (Python, the .NET SDK, the Edge WebView2 runtime) via
+`winget`, then builds and deploys **both** desktop apps to `C:\Apps\RusNet` — no menu, no picking:
 
 ```bat
-install.bat both          :: or  python  |  windows
+deploy.bat                      :: builds + deploys both; add -Force or -Launch
 ```
-
-Under the hood that calls **`install.ps1`** (run it directly for more control):
 
 ```powershell
-.\install.ps1 -Target both      # python + the .NET app, auto-installing prereqs
-.\install.ps1                    # Python only, into .venv  (-System to skip the venv)
+.\deploy.ps1                    # fast no-op once nothing has changed
+.\deploy.ps1 -Force -Launch     # rebuild/reinstall from scratch, then open the app
 ```
 
-**macOS / Linux** (Python only — the .NET app is Windows-only):
+This writes:
 
-```sh
-./install.sh                    # creates .venv, installs requirements; --system to skip the venv
-```
+- `C:\Apps\RusNet\Windows\RusNet.Viewer.exe` — the .NET WebView2 desktop app.
+- `C:\Apps\RusNet\Python\` — a standalone venv with the `rusnet` package (desktop + interfaces
+  extras) installed, plus `rusnet.bat` (CLI) and `rusnet-desktop.bat` (pywebview viewer) launchers.
+- `C:\Apps\RusNet\rusnet\` — a vendored copy of the Python package, which is what lets the
+  deployed Windows app's **Scan** button find `python -m rusnet` with no setup.
 
-The Python install creates a `.venv`, installs `requirements.txt` (pywebview + psutil) and the
-`rusnet` command; then activate it (`.\.venv\Scripts\Activate.ps1` or `source .venv/bin/activate`). The
-Windows target publishes the app to `dist\windows\RusNet.Viewer.exe`. You can also skip the scripts
-and run the stdlib-only core straight from the checkout with `python -m rusnet ...`.
+**macOS / Linux** (Python only — the .NET app and `deploy.ps1` are Windows-only): there's no
+install script; the core is stdlib-only, so `python -m rusnet ...` runs straight from the
+checkout, and `pip install .[desktop,interfaces]` adds the desktop viewer if you want it.
+
+You can always skip deploying and run the stdlib-only core straight from the checkout with
+`python -m rusnet ...` on any platform.
 
 ## Quick start
 

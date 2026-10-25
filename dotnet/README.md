@@ -11,9 +11,9 @@ all live in the page's own toolbar.
 
 ## Build & run
 
-Easiest: from the repo root, double-click `install.bat` and choose **Windows** (or run
-`install.bat windows`). It auto-installs the .NET SDK and the WebView2 runtime via winget if
-missing, then publishes the app to `dist\windows\RusNet.Viewer.exe`.
+Easiest: from the repo root, double-click `deploy.bat` (or run `deploy.ps1`). It
+auto-installs the .NET SDK and the WebView2 runtime via winget if missing, then publishes
+the app to `C:\Apps\RusNet\Windows\RusNet.Viewer.exe` (see the repo root README).
 
 To work on it directly you need the .NET 10 SDK and the Microsoft Edge WebView2 Runtime
 (preinstalled on current Windows 11; the Evergreen installer covers older machines).
@@ -71,9 +71,11 @@ subprocess and loads the JSON it writes. For the subprocess to find the `rusnet`
 the app looks for a folder containing `rusnet/__main__.py` starting from `RUSNET_HOME`
 (if set), then the app's base directory and the working directory, walking up a few levels.
 Running the app from its repo checkout (`dotnet run --project RusNet.Viewer`) works out of
-the box; for a copied-out build, set `RUSNET_HOME` to the RusNet checkout. If Python or the
-package can't be found, the app says so and you can still `python -m rusnet scan` yourself
-and use **Open**. Python is found via `python`, falling back to the Windows `py -3` launcher.
+the box; `deploy.ps1` also vendors a copy of `rusnet\` to `C:\Apps\RusNet\rusnet` (a parent
+of `Windows\`), so the deployed exe finds it the same way with no `RUSNET_HOME` needed. If
+Python or the package can't be found, the app says so and you can still `python -m rusnet
+scan` yourself and use **Open**. Python is found via `python`, falling back to the Windows
+`py -3` launcher.
 
 ## Regenerating viewer.htm
 
