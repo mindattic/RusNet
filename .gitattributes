@@ -1,0 +1,9 @@
+# Normalize text to LF in the repo by default...
+* text=auto eol=lf
+
+# ...but keep Windows batch files CRLF - cmd.exe fails to resolve `goto` labels with LF endings.
+# (Later rules win, so these override the default above.)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+# PowerShell is happiest CRLF on Windows too.
+*.ps1 text eol=crlf

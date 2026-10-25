@@ -31,20 +31,31 @@ The JSON is the interchange format: **any RusNet viewer loads any RusNet JSON**.
 
 ## Install
 
-The core needs only Python 3.9+. The install scripts create a `.venv`, install `requirements.txt`
-(pywebview + psutil, for the desktop app and cleaner interface enumeration), and add the `rusnet`
-command:
+**Windows, easiest:** double-click **`install.bat`** and pick **Python**, **Windows** (the .NET
+desktop app), or **Both**. It auto-installs any missing prerequisites (Python, the .NET SDK, the Edge
+WebView2 runtime) via `winget`, then sets up what you chose. Scriptable too:
+
+```bat
+install.bat both          :: or  python  |  windows
+```
+
+Under the hood that calls **`install.ps1`** (run it directly for more control):
 
 ```powershell
-.\install.ps1            # Windows (PowerShell); -System to skip the venv
-```
-```sh
-./install.sh            # macOS / Linux; --system to skip the venv
+.\install.ps1 -Target both      # python + the .NET app, auto-installing prereqs
+.\install.ps1                    # Python only, into .venv  (-System to skip the venv)
 ```
 
-Then activate the environment (`.\.venv\Scripts\Activate.ps1` or `source .venv/bin/activate`). You can
-also skip the scripts entirely and run the stdlib-only core straight from the checkout with
-`python -m rusnet ...`.
+**macOS / Linux** (Python only — the .NET app is Windows-only):
+
+```sh
+./install.sh                    # creates .venv, installs requirements; --system to skip the venv
+```
+
+The Python install creates a `.venv`, installs `requirements.txt` (pywebview + psutil) and the
+`rusnet` command; then activate it (`.\.venv\Scripts\Activate.ps1` or `source .venv/bin/activate`). The
+Windows target publishes the app to `dist\windows\RusNet.Viewer.exe`. You can also skip the scripts
+and run the stdlib-only core straight from the checkout with `python -m rusnet ...`.
 
 ## Quick start
 

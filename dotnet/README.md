@@ -11,8 +11,12 @@ all live in the page's own toolbar.
 
 ## Build & run
 
-Requires the .NET 10 SDK and the Microsoft Edge WebView2 Runtime (preinstalled on
-current Windows 11; the Evergreen installer covers older machines).
+Easiest: from the repo root, double-click `install.bat` and choose **Windows** (or run
+`install.bat windows`). It auto-installs the .NET SDK and the WebView2 runtime via winget if
+missing, then publishes the app to `dist\windows\RusNet.Viewer.exe`.
+
+To work on it directly you need the .NET 10 SDK and the Microsoft Edge WebView2 Runtime
+(preinstalled on current Windows 11; the Evergreen installer covers older machines).
 
 ```sh
 # from this dotnet/ folder
