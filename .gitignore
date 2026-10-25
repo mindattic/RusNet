@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.env
+
+# RusNet scan outputs (don't commit real network maps of someone's LAN)
+network-map.json
+network-map.htm
+*-map.json
+rusnet-viewer.htm
+/scans/
+
+# Optional full IEEE registry a user may drop in
+rusnet/data/oui-full.txt
+
+# .NET
+[Bb]in/
+[Oo]bj/
+*.user
+
+# Editors / OS
+.vs/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+# RusNet core (scan + JSON + self-contained HTML report) needs nothing beyond the Python standard
+# library. The optional extras below improve one surface each.
+
+# Native desktop viewer window (python -m rusnet.desktop). On Windows it uses the built-in Edge
+# WebView2 runtime; no other dependency.
+pywebview>=5.0 ; extra == "desktop"
+
+# Cleaner cross-platform interface enumeration. RusNet falls back to parsing ipconfig/ip when it is
+# absent, so this is optional.
+psutil>=5.9 ; extra == "interfaces"

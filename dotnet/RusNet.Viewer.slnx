@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="RusNet.Viewer/RusNet.Viewer.csproj" />
+  <Project Path="RusNet.Viewer.Tests/RusNet.Viewer.Tests.csproj" />
+</Solution>

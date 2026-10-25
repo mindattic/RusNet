@@ -1,0 +1,187 @@
+# RusNet bundled OUI prefixes (first 3 octets, no separators) -> vendor.
+# A curated subset of the IEEE registry covering vendors common on a home/office LAN.
+# Drop the official IEEE oui.txt at rusnet/data/oui-full.txt for the complete set.
+# prefix,vendor
+001451,Apple
+0017F2,Apple
+0019E3,Apple
+003065,Apple
+2C54CF,Apple
+3C0754,Apple
+F0DBF8,Apple
+A4C361,Apple
+AC87A3,Apple
+D89E3F,Apple
+F4F15A,Apple
+B827EB,Raspberry Pi Foundation
+DCA632,Raspberry Pi Trading
+E45F01,Raspberry Pi Trading
+2CCF67,Raspberry Pi Trading
+0050F2,Microsoft
+7C1E52,Microsoft
+000D3A,Microsoft
+485073,Microsoft
+C83F26,Microsoft
+000C29,VMware
+005056,VMware
+000569,VMware
+080027,PCS (VirtualBox)
+525400,QEMU/KVM
+001018,Broadcom
+000AF7,Broadcom
+0021CC,Flextronics
+F81A67,TP-Link
+50C7BF,TP-Link
+A42BB0,TP-Link
+143CC3,TP-Link
+0C8063,TP-Link
+C006C3,TP-Link
+001F3F,AVM (Fritz!Box)
+3810D5,AVM (Fritz!Box)
+E8DF70,AVM (Fritz!Box)
+00179A,D-Link
+001CF0,D-Link
+14D64D,D-Link
+001346,D-Link
+00095B,Netgear
+000FB5,Netgear
+0014BF,Netgear
+20E52A,Netgear
+A040A0,Netgear
+001D7E,Cisco-Linksys
+002129,Cisco-Linksys
+C0C1C0,Cisco-Linksys
+48F8B3,Cisco-Linksys
+000B86,Aruba Networks
+18643F,Aruba Networks
+001A1E,Aruba Networks
+000142,Cisco
+0007EB,Cisco
+00000C,Cisco
+E0CB4E,ASUSTek
+2C56DC,ASUSTek
+04D9F5,ASUSTek
+1C872C,ASUSTek
+AC220B,ASUSTek
+D017C2,ASUSTek
+60A44C,ASUSTek
+F832E4,ASUSTek
+94DBC9,Azurewave
+0024D7,Intel
+3C9709,Intel
+8C705A,Intel
+A0A8CD,Intel
+50EB71,Intel
+B4969D,Intel
+E4A7A0,Intel
+001B21,Intel
+000E35,Intel
+0021B7,Lexmark
+00040B,Lexmark
+0000AA,Xerox
+9C934E,Xerox
+08003E,Xerox
+002500,Apple
+0080777,Brother
+008077,Brother
+3C2AF4,Brother
+30055C,Brother
+0C96E6,Canon
+68F728,Canon
+88879B,Canon
+001E8F,Canon
+00000F,Next (HP)
+001321,HP
+002481,HP
+3024A9,HP
+A0481C,HP
+10604B,HP
+D4C9EF,HP
+E4115B,HP
+9CB654,HP
+001560,HP
+A45D36,HP
+001986,Samsung
+0015B9,Samsung
+002454,Samsung
+08D42B,Samsung
+5CF6DC,Samsung
+8425DB,Samsung
+F008F1,Samsung
+C8BA94,Samsung
+00166F,Samsung
+0012FB,Samsung
+2CF0A2,Google
+F4F5D8,Google
+A4778F,Google
+D8EB46,Google
+1844E6,Google
+3C5AB4,Google
+F88FCA,Google (Nest)
+648099,Amazon Technologies
+0C47C9,Amazon Technologies
+44650D,Amazon Technologies
+68375A,Amazon Technologies
+F0272D,Amazon Technologies
+68DBF5,Amazon Technologies
+50DCE7,Amazon Technologies
+747548,Amazon Technologies
+AC63BE,Amazon Technologies
+0C8CDC,Sonos
+5CAAFD,Sonos
+B8E937,Sonos
+949F3E,Sonos
+000E58,Sonos
+001788,Philips Lighting (Hue)
+ECB5FA,Philips Lighting (Hue)
+0017880,Philips Lighting (Hue)
+B0C554,D-Link
+186472,Roku
+0CDF22,Roku
+B0A737,Roku
+CC6DA0,Roku
+D0EFC1,Ubiquiti
+FCECDA,Ubiquiti
+788A20,Ubiquiti
+245A4C,Ubiquiti
+B4FBE4,Ubiquiti
+687251,Ubiquiti
+742F68,Azurewave
+9009D0,Synology
+0011322,Synology
+001132,Synology
+00089B,ICPDAS
+0014FD,Thecus
+000D0B,Buffalo
+001601,Buffalo
+0024A5,Buffalo
+00904C,Epigram
+B0359F,Sagemcom
+0019C5,Sony
+FCF152,Sony
+30F9ED,Sony
+001DBA,Sony
+001315,KYE Systems
+002691,LG Electronics
+001E75,LG Electronics
+00E091,LG Electronics
+A816B2,LG Electronics
+CC2D8C,LG Electronics
+001CB3,Apple
+0CB319,Shenzhen (generic IoT)
+DC4F22,Espressif (ESP8266/ESP32)
+2462AB,Espressif
+3C6105,Espressif
+A4CF12,Espressif
+8CAAB5,Espressif
+240AC4,Espressif
+7CDFA1,Espressif
+B4E62D,Espressif
+485519,Espressif
+C45BBE,Espressif
+3C71BF,Espressif
+84F3EB,Espressif
+60019C,Tuya Smart
+D8F15B,Tuya Smart
+50029A,Tuya Smart
+68572D,Tuya Smart
