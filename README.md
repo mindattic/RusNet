@@ -31,17 +31,20 @@ The JSON is the interchange format: **any RusNet viewer loads any RusNet JSON**.
 
 ## Install
 
-**Windows, easiest:** double-click **`deploy.bat`** (or run **`deploy.ps1`** directly). It
-auto-installs any missing prerequisites (Python, the .NET SDK, the Edge WebView2 runtime) via
-`winget`, then builds and deploys **both** desktop apps to `C:\Apps\RusNet` — no menu, no picking:
+**Windows, easiest:** double-click **`deploy.bat`** (or run **`deploy.ps1`** directly). It asks
+first: **1) Deploy & Run** auto-installs any missing prerequisites (Python, the .NET SDK, the Edge
+WebView2 runtime) via `winget`, then rebuilds and deploys **both** desktop apps to `C:\Apps\RusNet`
+(`deploy.ps1 -Force -Launch`) and opens the viewer; **2) Run** just opens the deployed viewer.
+The script itself never asks:
 
 ```bat
-deploy.bat                      :: builds + deploys both; add -Force or -Launch
+deploy.bat                      :: menu: 1) Deploy & Run  2) Run
 ```
 
 ```powershell
 .\deploy.ps1                    # fast no-op once nothing has changed
 .\deploy.ps1 -Force -Launch     # rebuild/reinstall from scratch, then open the app
+.\deploy.ps1 -LauncherOnly      # only rewrite C:\Apps\RusNet\deploy.bat
 ```
 
 This writes:
