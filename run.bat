@@ -1,12 +1,12 @@
 @echo off
 rem ============================================================================
-rem  RusNet deploy (Windows)
+rem  RusNet run (Windows)
 rem
 rem  Double-click for a menu (MAT-T67):
-rem    1) Deploy & Run - rebuild and redeploy BOTH halves (deploy.ps1 -Force -Launch):
+rem    1) Deploy & Run - rebuild and redeploy BOTH halves (run.ps1 -Force -Launch):
 rem         Windows app -> C:\Apps\RusNet\Windows
 rem         Python app  -> C:\Apps\RusNet\Python
-rem       then open RusNet.Viewer.exe. Extra arguments go to deploy.ps1.
+rem       then open RusNet.Viewer.exe. Extra arguments go to run.ps1.
 rem    2) Run - open the deployed RusNet.Viewer.exe without redeploying.
 rem ============================================================================
 setlocal EnableExtensions
@@ -23,13 +23,13 @@ if errorlevel 2 goto run
 
 where powershell >nul 2>nul
 if errorlevel 1 (
-  echo ERROR: PowerShell was not found; cannot run deploy.ps1.
+  echo ERROR: PowerShell was not found; cannot run run.ps1.
   pause
   exit /b 1
 )
 
 :deploy
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0deploy.ps1" -Force -Launch %*
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0run.ps1" -Force -Launch %*
 set "RC=%ERRORLEVEL%"
 echo.
 if "%RC%"=="0" ( echo All done. ) else ( echo Deploy did not complete ^(exit %RC%^). )

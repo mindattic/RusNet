@@ -31,20 +31,20 @@ The JSON is the interchange format: **any RusNet viewer loads any RusNet JSON**.
 
 ## Install
 
-**Windows, easiest:** double-click **`deploy.bat`** (or run **`deploy.ps1`** directly). It asks
+**Windows, easiest:** double-click **`run.bat`** (or run **`run.ps1`** directly). It asks
 first: **1) Deploy & Run** auto-installs any missing prerequisites (Python, the .NET SDK, the Edge
 WebView2 runtime) via `winget`, then rebuilds and deploys **both** desktop apps to `C:\Apps\RusNet`
-(`deploy.ps1 -Force -Launch`) and opens the viewer; **2) Run** just opens the deployed viewer.
+(`run.ps1 -Force -Launch`) and opens the viewer; **2) Run** just opens the deployed viewer.
 The script itself never asks:
 
 ```bat
-deploy.bat                      :: menu: 1) Deploy & Run  2) Run
+run.bat                         :: menu: 1) Deploy & Run  2) Run
 ```
 
 ```powershell
-.\deploy.ps1                    # fast no-op once nothing has changed
-.\deploy.ps1 -Force -Launch     # rebuild/reinstall from scratch, then open the app
-.\deploy.ps1 -LauncherOnly      # only rewrite C:\Apps\RusNet\deploy.bat
+.\run.ps1                       # fast no-op once nothing has changed
+.\run.ps1 -Force -Launch        # rebuild/reinstall from scratch, then open the app
+.\run.ps1 -LauncherOnly         # only rewrite C:\Apps\RusNet\run.bat
 ```
 
 This writes:
@@ -55,7 +55,7 @@ This writes:
 - `C:\Apps\RusNet\rusnet\` — a vendored copy of the Python package, which is what lets the
   deployed Windows app's **Scan** button find `python -m rusnet` with no setup.
 
-**macOS / Linux** (Python only — the .NET app and `deploy.ps1` are Windows-only): there's no
+**macOS / Linux** (Python only — the .NET app and `run.ps1` are Windows-only): there's no
 install script; the core is stdlib-only, so `python -m rusnet ...` runs straight from the
 checkout, and `pip install .[desktop,interfaces]` adds the desktop viewer if you want it.
 

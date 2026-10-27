@@ -11,7 +11,7 @@ all live in the page's own toolbar.
 
 ## Build & run
 
-Easiest: from the repo root, double-click `deploy.bat` (or run `deploy.ps1`). It
+Easiest: from the repo root, double-click `run.bat` (or run `run.ps1`). It
 auto-installs the .NET SDK and the WebView2 runtime via winget if missing, then publishes
 the app to `C:\Apps\RusNet\Windows\RusNet.Viewer.exe` (see the repo root README).
 
@@ -71,7 +71,7 @@ subprocess and loads the JSON it writes. For the subprocess to find the `rusnet`
 the app looks for a folder containing `rusnet/__main__.py` starting from `RUSNET_HOME`
 (if set), then the app's base directory and the working directory, walking up a few levels.
 Running the app from its repo checkout (`dotnet run --project RusNet.Viewer`) works out of
-the box; `deploy.ps1` also vendors a copy of `rusnet\` to `C:\Apps\RusNet\rusnet` (a parent
+the box; `run.ps1` also vendors a copy of `rusnet\` to `C:\Apps\RusNet\rusnet` (a parent
 of `Windows\`), so the deployed exe finds it the same way with no `RUSNET_HOME` needed. If
 Python or the package can't be found, the app says so and you can still `python -m rusnet
 scan` yourself and use **Open**. Python is found via `python`, falling back to the Windows
