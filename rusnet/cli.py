@@ -81,7 +81,10 @@ def _load_scan(path: str) -> Scan:
     scan.networks = data.get("networks", [])
     scan.stats = data.get("stats", {})
     for i in data.get("interfaces", []):
-        scan.interfaces.append(Interface(**{k: i.get(k) for k in Interface.__annotations__ if k in i}))
+        # Every interface field is optional in the schema, including name (which the dataclass needs).
+        fields = {k: i.get(k) for k in Interface.__annotations__ if k in i}
+        fields.setdefault("name", "")
+        scan.interfaces.append(Interface(**fields))
     for h in data.get("hosts", []):
         host = Host(ip=h.get("ip", ""))
         for k in ("mac", "vendor", "hostname", "is_up", "is_self", "is_gateway",

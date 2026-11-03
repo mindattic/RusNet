@@ -53,11 +53,25 @@ def _via_psutil() -> List[Interface]:
     return out
 
 
+_IPV4 = re.compile(r"^\d+\.\d+\.\d+\.\d+$")
+
+
+def _is_address(text: str) -> bool:
+    """True for a bare IPv4/IPv6 address (an IPv6 zone suffix like "%12" is allowed)."""
+    try:
+        ipaddress.ip_address(text.split("%", 1)[0])
+        return True
+    except ValueError:
+        return False
+
+
 def _parse_ipconfig(text: str) -> List[Interface]:
     """Parse Windows `ipconfig /all` output into interfaces."""
     out: List[Interface] = []
     current: Interface | None = None
-    pending_dns = False
+    # Which multi-valued field a bare continuation line belongs to ("dns" / "gateway" / None).
+    # ipconfig lists IPv6 values first, so the IPv4 gateway or DNS server is often on a later line.
+    pending: str | None = None
     for raw in text.splitlines():
         line = raw.rstrip()
         if not line:
@@ -68,19 +82,26 @@ def _parse_ipconfig(text: str) -> List[Interface]:
                 out.append(current)
             name = re.sub(r"^.*adapter\s+", "", line[:-1], flags=re.I).strip()
             current = Interface(name=name or line[:-1].strip())
-            pending_dns = False
+            pending = None
             continue
         if current is None:
             continue
         stripped = line.strip()
+        if _is_address(stripped):
+            # Continuation line: another value of the previous field (extra DNS server, or the
+            # IPv4 gateway listed under an IPv6 one). An IPv6 value has colons, so test this
+            # before the "label : value" match, which would misread it as a new field.
+            if _IPV4.match(stripped):
+                if pending == "dns":
+                    current.dns.append(stripped)
+                elif pending == "gateway" and not current.gateway:
+                    current.gateway = stripped
+            continue
         m = re.match(r"(.+?)[\.\s]*:\s*(.*)$", stripped)
         if not m:
-            # Continuation line (extra DNS server, etc.).
-            if pending_dns and re.match(r"^\d+\.\d+\.\d+\.\d+$", stripped):
-                current.dns.append(stripped)
             continue
         label, value = m.group(1).strip().lower(), m.group(2).strip()
-        pending_dns = False
+        pending = None
         if "physical address" in label:
             current.mac = value.replace("-", ":").lower()
         elif "ipv4 address" in label:
@@ -93,12 +114,13 @@ def _parse_ipconfig(text: str) -> List[Interface]:
             if current.ip:
                 current.cidr = _cidr_from_mask(current.ip, value)
         elif "default gateway" in label:
-            if re.match(r"^\d+\.\d+\.\d+\.\d+$", value):
+            if _IPV4.match(value):
                 current.gateway = value
+            pending = "gateway"
         elif "dns servers" in label:
-            if re.match(r"^\d+\.\d+\.\d+\.\d+$", value):
+            if _IPV4.match(value):
                 current.dns.append(value)
-            pending_dns = True
+            pending = "dns"
         elif "dhcp enabled" in label:
             current.dhcp = value
     if current and current.ip:

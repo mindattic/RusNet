@@ -67,7 +67,15 @@ _WIRE_JS = """
   function wire() {
     if (!window.rusnet || !window.pywebview) { return setTimeout(wire, 50); }
     window.rusnet.setHostOpen(function () {
-      window.pywebview.api.open_file().then(function (txt) { if (txt) window.rusnet.load(txt); });
+      window.pywebview.api.open_file().then(function (txt) {
+        if (!txt) return;
+        // A read failure comes back as {"__error__": ...}; show it rather than "Not a RusNet report".
+        try {
+          var obj = JSON.parse(txt);
+          if (obj && obj.__error__) { alert('Could not open the file: ' + obj.__error__); return; }
+        } catch (e) {}
+        window.rusnet.load(txt);
+      });
     });
     // scan_now runs on a pywebview worker thread, so the window stays responsive; show the overlay
     // around it and load the result (or a readable error) when it returns.

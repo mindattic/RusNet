@@ -31,6 +31,9 @@
     'Unknown device':                   { c: '#484f58', g: '❓' }
   };
   function typeInfo(t) { return TYPES[t] || TYPES['Unknown device']; }
+  // device_type is optional in the schema; a host without one is an "Unknown device" everywhere
+  // (label, grouping, chart and filter), so the filter and the groups always agree.
+  function typeOf(h) { return h.device_type || 'Unknown device'; }
 
   // Palette for charts that aren't keyed by device type (vendors, OS...).
   var PALETTE = ['#1f6feb', '#3fb950', '#d29922', '#8957e5', '#db61a2', '#56d4dd', '#f0883e',
@@ -240,7 +243,7 @@
       glyph.setAttribute('font-size', big ? '20' : '11'); glyph.textContent = info.g;
       g.appendChild(glyph);
       var title = document.createElementNS(ns, 'title');
-      title.textContent = (h.hostname ? h.hostname + ' - ' : '') + h.ip + '\n' + h.device_type +
+      title.textContent = (h.hostname ? h.hostname + ' - ' : '') + h.ip + '\n' + typeOf(h) +
                           (h.vendor ? '\n' + h.vendor : '');
       g.appendChild(title);
       g.addEventListener('click', function () { showDetail(h); });
@@ -271,7 +274,7 @@
     card.appendChild(top);
 
     if (h.vendor) card.appendChild(kvRow('Vendor', h.vendor));
-    card.appendChild(kvRow('Type', h.device_type));
+    card.appendChild(kvRow('Type', typeOf(h)));
     if (h.os_guess) card.appendChild(kvRow('OS (guess)', h.os_guess));
     if (h.ports && h.ports.length) card.appendChild(kvRow('Open ports', h.ports.length + ''));
 
@@ -376,7 +379,7 @@
     menu.appendChild(ctxItem('Copy as JSON', function () { copy(JSON.stringify(h, null, 2)); }));
     if (hasHttp(h)) { menu.appendChild(ctxSep()); menu.appendChild(ctxItem('Open web interface', function () { openHttp(h); })); }
     menu.appendChild(ctxSep());
-    menu.appendChild(ctxItem('Filter to ' + h.device_type, function () { toggleTypeFilter(h.device_type); }));
+    menu.appendChild(ctxItem('Filter to ' + typeOf(h), function () { toggleTypeFilter(typeOf(h)); }));
     menu.classList.add('is-open');
     var mw = 200, mh = menu.offsetHeight || 260;
     menu.style.left = Math.min(ev.clientX, window.innerWidth - mw - 8) + 'px';
@@ -416,11 +419,11 @@
   // ---- filters ---------------------------------------------------------------------------------
   function toggleTypeFilter(t) { state.typeFilter = (state.typeFilter === t) ? null : t; render(); }
   function matches(h) {
-    if (state.typeFilter && h.device_type !== state.typeFilter) return false;
+    if (state.typeFilter && typeOf(h) !== state.typeFilter) return false;
     if (!state.filter) return true;
     var q = state.filter.toLowerCase();
     var blob = [h.ip, h.hostname, h.mac, h.vendor, h.device_type, h.os_guess, h.model]
-      .concat((h.ports || []).map(function (p) { return p.number + ' ' + p.service + ' ' + p.banner; }))
+      .concat((h.ports || []).map(function (p) { return p.number + ' ' + (p.service || '') + ' ' + (p.banner || ''); }))
       .join(' ').toLowerCase();
     return blob.indexOf(q) >= 0;
   }
@@ -444,7 +447,7 @@
     [['Hosts up', up.length], ['Hosts total', all.length],
      ['Open ports', all.reduce(function (s, h) { return s + (h.ports ? h.ports.length : 0); }, 0)],
      ['Vendors', uniq(all.map(function (h) { return h.vendor; })).length],
-     ['Device types', uniq(all.map(function (h) { return h.device_type; })).length],
+     ['Device types', uniq(all.map(typeOf)).length],
      ['Networks', (d.networks || []).length]
     ].forEach(function (s) {
       var tile = el('div', 'rn-stat');
@@ -455,7 +458,7 @@
 
     // charts
     clear(dom.charts);
-    var typeCounts = countBy(all, function (h) { return h.device_type; });
+    var typeCounts = countBy(all, typeOf);
     // Only the device-type donut drives the (device-type) filter; others are display-only.
     dom.charts.appendChild(donutCard('Device types', typeCounts, function (e) { return typeInfo(e.label).c; }, toggleTypeFilter));
     var osCounts = countBy(all.filter(function (h) { return h.os_guess; }), function (h) { return h.os_guess; });
@@ -477,7 +480,7 @@
     clear(dom.devices);
     dom.filterNote.textContent = state.typeFilter ? ('Filtered to: ' + state.typeFilter + '  (click again to clear)') : '';
     var groups = {};
-    hosts.forEach(function (h) { (groups[h.device_type] = groups[h.device_type] || []).push(h); });
+    hosts.forEach(function (h) { var t = typeOf(h); (groups[t] = groups[t] || []).push(h); });
     Object.keys(groups).sort(function (a, b) { return groups[b].length - groups[a].length; }).forEach(function (type) {
       var info = typeInfo(type);
       var g = el('div', 'rn-group');

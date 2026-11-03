@@ -30,6 +30,9 @@ class PingResult:
 def _ping_once(ip: str, timeout_ms: int) -> PingResult:
     if sys.platform.startswith("win"):
         cmd = ["ping", "-n", "1", "-w", str(timeout_ms), ip]
+    elif sys.platform == "darwin":
+        # -W is milliseconds on macOS (passing seconds there would wait ~1 ms per host).
+        cmd = ["ping", "-c", "1", "-W", str(max(1, int(timeout_ms))), ip]
     else:
         # -W is seconds on Linux; round up to at least 1.
         secs = max(1, round(timeout_ms / 1000))

@@ -82,14 +82,17 @@ public partial class MainWindow : Window
 
     private async void CoreWebView2_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
     {
-        if (!e.IsSuccess || _bridgeReady)
+        if (!e.IsSuccess)
             return;
 
-        // Register the native open hook once the viewer's JS API exists.
+        // Register the native open/scan hooks on every load: a reload (F5 or the default context
+        // menu) gives the page a fresh window.rusnet with no hooks, which would hide Scan again.
         await WebView.CoreWebView2.ExecuteScriptAsync(HostBridgeScript);
+        if (_bridgeReady)
+            return;
         _bridgeReady = true;
 
-        // Load a report passed on the command line, if any.
+        // Load a report passed on the command line, if any (first load only).
         if (Application.Current is App app && app.StartupFile is { } startup)
         {
             await LoadReportAsync(startup);
