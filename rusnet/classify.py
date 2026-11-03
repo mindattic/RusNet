@@ -77,9 +77,10 @@ def classify(host: Host) -> None:
         host.device_type = "Smart speaker / audio"
     elif has("synology", "qnap", "nas", "truenas", "freenas", "diskstation", "readynas", "unraid") or (
         # NFS/AFP are real file-server signals; bare SMB (445/139) is on every Windows box, so it
-        # alone doesn't make a NAS - require an NFS/AFP port or an explicitly shared (non-Windows) SMB.
+        # alone doesn't make a NAS - require an NFS/AFP port or SMB on a host known to be non-Windows.
+        # With no OS guess (no ping reply, so no TTL) bare SMB is most likely a Windows box: see below.
         ports & {2049, 548}
-        or (445 in ports and not host.os_guess.startswith("Windows"))
+        or (445 in ports and host.os_guess and not host.os_guess.startswith("Windows"))
     ):
         host.device_type = "NAS / file server"
     elif has("iphone", "ipad", "android", "pixel", "galaxy", "oneplus", "xiaomi") or (
@@ -88,7 +89,11 @@ def classify(host: Host) -> None:
         host.device_type = "Phone / tablet"
     elif host.vendor in ("Raspberry Pi Foundation", "Raspberry Pi Trading"):
         host.device_type = "Single-board computer (Raspberry Pi)"
-    elif ports & {3389} or (host.os_guess == "Windows" and ports & {445, 135, 139}):
+    elif ports & {3389} or (host.os_guess == "Windows" and ports & {445, 135, 139}) or (
+        # SMB from a host that didn't answer ping (no TTL, so no OS guess): a generic Windows /
+        # file-share host, the common case, rather than a NAS.
+        not host.os_guess and 445 in ports
+    ):
         host.device_type = "Windows PC"
     elif ports & {22} and host.os_guess.startswith("Linux"):
         host.device_type = "Linux host / server"

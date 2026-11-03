@@ -68,6 +68,10 @@ class ClassifyTests(unittest.TestCase):
         # 445 on a Windows-TTL host is an ordinary PC, not a NAS.
         self.assertEqual(self._c(ip="1.1.1.3", ttl=128, ports=[445, 139, 3389]).device_type, "Windows PC")
 
+    def test_smb_without_os_guess_is_windows_not_nas(self):
+        # No ping reply (no TTL, no OS guess) plus bare SMB: a generic Windows / file-share host.
+        self.assertEqual(self._c(ip="1.1.1.7", ports=[445]).device_type, "Windows PC")
+
     def test_nas_on_nfs(self):
         self.assertEqual(self._c(ip="1.1.1.4", ttl=64, ports=[2049, 445]).device_type, "NAS / file server")
 
