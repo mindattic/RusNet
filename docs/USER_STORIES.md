@@ -30,3 +30,8 @@ _Nothing recorded yet._
 | RN-T7 | 2026-10-25 | feature | closed | Replace install.ps1/install.bat/install.sh with a single deploy.ps1/deploy.bat that auto-installs prerequisites via winget and deploys both desktop apps to C:\Apps\RusNet (Windows, Python, vendored rusnet source for the Scan button), cleaning stale output before each republish | deploy.ps1 -Force -Launch run |
 | RN-T8 | 2026-10-25 | feature | closed | Default scan output and both desktop apps' Open dialogs to the user's real Downloads folder, resolved via SHGetKnownFolderPath (with registry fallback) instead of a naive USERPROFILE join so a relocated/OneDrive-redirected Downloads folder still resolves correctly | rusnet.paths.get_downloads_dir() |
 | RN-T9 | 2026-10-25 | chore | closed | Bump RusNet version to 1.0.0 and adopt N.0.0 versioning going forward | docs/SCHEMA.md, pyproject.toml, rusnet/__init__.py, rusnet/model.py |
+| RN-T10 | 2026-11-02 | docs | open | Adopt MindAttic.Agency docs-site pipeline, publish README to GitHub Pages (HOUSE-LAW-14) | — |
+| RN-T11 | 2026-11-02 | fix | closed | Bughunt sweep, two passes: find and fix real bugs across tracked source (user request 2026-11-02) | — |
+| RN-T12 | 2026-11-02 | fix | closed | Fix the open items the 2026-11-02 bughunt left for decision (SMB host without ping/OS guess classified as Windows/file share, not NAS) | — |
+| RN-T13 | 2026-11-10 | chore | closed | Crash recovery: commit the command-catalog sync (.agent/commands/*.md) and regenerated docs/USER_STORIES.md left uncommitted by the session crash | — |
+| RN-T14 | 2026-11-10 | chore | open | Crash recovery: commit the command-catalog sync (.agent/commands/*.md) and regenerated docs/USER_STORIES.md left uncommitted by the session crash | — |
